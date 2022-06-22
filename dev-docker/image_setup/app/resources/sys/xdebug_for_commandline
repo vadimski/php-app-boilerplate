@@ -1,0 +1,2 @@
+#!/bin/bash
+env PHP_IDE_CONFIG="serverName=cms" XDEBUG_CONFIG="idekey=PHPSTORM" SYMFONY_DEBUG="1" $@

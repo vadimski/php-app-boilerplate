@@ -1,0 +1,25 @@
+version: '3'
+
+services:
+  cms:
+    build: ./image_setup/app
+    hostname: app
+    image: app
+    volumes:
+      - '${APP_PATH}:/var/www/app/:delegated'
+    ports:
+      - 80:8080
+
+  db:
+    image: mysql:5.7
+    platform: linux/x86_64
+    hostname: db
+    command: --sql_mode="" --init-file /data/application/init.sql
+    volumes:
+      - ./image_setup/mysql/5.7/db.sql:/data/application/init.sql
+    environment:
+      MYSQL_ROOT_USER: root
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: app
+    ports:
+      - '3306:3306'

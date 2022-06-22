@@ -1,0 +1,38 @@
+#!/bin/bash
+
+if [ "$1" == "start" ];
+then
+	if [ -f /etc/php/7.4/mods-available/20-xdebug.ini.disabled ];
+		then
+		    rm -f /etc/php/7.4/mods-available/20-xdebug.ini
+			mv /etc/php/7.4/mods-available/20-xdebug.ini.disabled /etc/php/7.4/mods-available/20-xdebug.ini
+			echo "xdebug enabled"
+			sudo supervisorctl restart php-fpm
+	fi;
+fi;
+
+if [ "$1" == "stop" ];
+then
+    if [ -f /etc/php/7.4/mods-available/20-xdebug.ini.disabled ];
+        then
+            echo "xdebug is already disabled."
+            exit 0
+    fi;
+	if [ -f /etc/php/7.4/mods-available/20-xdebug.ini ];
+		then
+			mv /etc/php/7.4/mods-available/20-xdebug.ini /etc/php/7.4/mods-available/20-xdebug.ini.disabled
+			echo ";disabled, run /etc/init.d/xdebug start to enable xdebug" > /etc/php/7.4/mods-available/20-xdebug.ini
+			echo "xdebug disabled"
+			sudo supervisorctl restart php-fpm
+	fi;
+fi;
+
+if [ "$1" == "status" ];
+then
+	if [ -f /etc/php/7.4/mods-available/20-xdebug.ini.disabled ];
+		then
+			echo "xdebug is disabled"
+		else
+		    echo "xdebug is enabled"
+	fi;
+fi;
